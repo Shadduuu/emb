@@ -1,0 +1,29 @@
+#include<reg51.h>
+#include<intrins.h> //Header file for NOP function
+void main()
+{
+int WAVEVALUE[12] =
+{ 128,192,238,255,238,192,128,64,17,0,17,64};
+
+// Create a look-up table (array) named
+//WAVEVALUE to send appropriate values to
+//DAC so that a sine-wave is generated.
+
+int i;
+while(1)
+{
+for(i=0;i<12;i++)
+{
+P1 = WAVEVALUE[i];
+_nop_();
+_nop_(); // _nop_() function introduces delay.
+_nop_();
+_nop_(); // Repeated use of _nop_() generates
+
+//wave of desired frequency
+
+_nop_0();
+_nop_();
+}
+}
+}
