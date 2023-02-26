@@ -1,0 +1,18 @@
+#include<reg51.h> //Header file for 8051
+void main() // Start of main() function
+{
+P1 = 0x00; // Initialize Port 1 as Output
+while(1) // Infinite Loop
+{
+do // 1st do-while for upward portion of //triangular wave
+{
+P1 += 0x05; // Increment P1 to get upward portion
+}
+while(P1<0xFF); // stop loop after reaching max value
+do // 2nd do-while for downward portion of //triangular wave
+{
+P1 -= 0x05; // Decrement P1to get downward portion
+}
+while(P1>0x00); // stop loop after reaching lowest value
+}
+}
