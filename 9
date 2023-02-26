@@ -1,0 +1,129 @@
+#include <reg51.h>
+unsigned char newkey,oldkey,p; //newkey variable is for newly pressed
+//key; oldkey variable is to store the
+//previous pressed key;
+//p variable acts as a pointer.
+signed char tmp; //tmp variable is to store the difference
+//between oldkey and newkey pressed
+sbit sd = P2^0; //Defining P2.0 bit as an sd;
+unsigned char look_up[]={0x3f,0x06,0x5b,0x4f,0x66,
+ 0x6d,0x7d,0x07,0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71};
+unsigned char motor_sequence[]={8,4,2,1,8,4,2,1,8,4,2,1,8,4,2,1};
+
+void key_scan (void); //Scan keyboard and check whether the key
+//is pressed?
+void get_key (void); //Get the pressed key code
+void display (unsigned char); //Display pressed key and also rotate motor
+void delay (unsigned int time);
+void main (void)
+{
+P0=0xf0;
+
+
+while (1)
+{
+key_scan ();
+get_key ();
+}
+}
+void key_scan (void)
+{
+oldkey=newkey; //stores previously pressed key in oldkey
+while (1)
+{
+P0=0xFE; //Make 1st row ground
+P0 &=0xFE; //Check whether key is pressed in the 1st row?
+if (P0!=0xFE) //if yes then
+break; //Come out of loop, else
+P0=0xFD; //Make 2nd row ground
+P0 &=0xFD; //Check whether the key is pressed in 1st row?
+if (P0!=0xFD) //if yes then
+break; //Come out of loop, else
+P0=0xFB; //Make 3rd row ground
+P0 &=0xFB; //Check whether the key is pressed in the 1st row?
+if (P0!=0xFD) //if yes then
+break; //Come out of loop, else
+P0=0xF7; //Make 4th row ground
+P0 &=0xF7; //Check whether the key is pressed in 1st row?
+if (P0!=0xF7) //if yes then
+break;//Come out of loop, else 
+} 
+newkey=P0; //Store keycode in newkey variable do { 
+do
+{P0=0xF0; //Again initialize P0 to its default value this  //will allow user to press next key  
+} 
+while (P0!= 0xf0); 
+}  
+void get_key (void)  
+{  
+if (newkey==0xee)  
+display (0);  
+else if (newkey==0xed)  
+display (1);  
+
+else if (newkey==0xeb) 
+display (2);  
+else if (newkey==0xe7)  
+display (3);  
+else if (newkey==0xde)  
+display (4);  
+else if (newkey==0xdd)  
+display (5);  
+else if (newkey==0xdb)  
+display (6); 
+else if (newkey==0xd7)  
+display (7);  
+else if (newkey==0xbe)  
+display (8);  
+else if (newkey==0xbd)  
+display (9);  
+else if (newkey==0xbb) 
+display (10); 
+else if (newkey==0xb7)  
+display (11); 
+else if (newkey==0x7e)  
+display (12); 
+else if (newkey==0x7d)  
+display (13);  
+else if (newkey==0x7b)  
+display(14); 
+else if (newkey==0x77)  
+display(15);  
+}  
+void display (unsigned char x)  
+{  
+newkey=x;  
+tmp=newkey-oldkey; //Take the difference between newkey and  //previously pressed key 
+sd=0; //Select the display 
+if (tmp<0x00) //if tmp value is less than zero it  //indicates that the newkey pressed is  
+//smaller than the previous key pressed 
+{ 
+ for (p=oldkey;p>newkey;p--)  
+ {  
+P3=motor_sequence[p]; //motor will rotate in steps  
+ //depends on tmp value, anti-clockwise 
+P1=look_up[p]; //displays value on seven segment 
+delay (10000);  
+} 
+P3=motor_sequence[p]; //motor will rotate once in anticlockwise P1=look_up[p];  
+delay (10000);  
+}  
+else  
+{ 
+for (p=oldkey;p<newkey;p++)  
+{  
+P3=motor_sequence[p]; //motor will rotate in steps depends  on  
+ //tmp value, clockwise 
+P1=look_up[p]; //displays value on seven segment 
+delay (10000); //software delay 
+}  
+P3=motor_sequence[p]; //motor will rotate once, clockwise 
+P1=look_up[p]; 
+delay (10000); 
+}  
+}  
+void delay (unsigned int time) 
+{ 
+unsigned int i;  
+for (i=0;i<=time;i++); 
+} 
