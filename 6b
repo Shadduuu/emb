@@ -1,18 +1,81 @@
-#include<reg51.h> //Header file for 8051
-void main() // Start of main() function
-{
-P1 = 0x00; // Initialize Port 1 as Output
-while(1) // Infinite Loop
-{
-do // 1st do-while for upward portion of //triangular wave
-{
-P1 += 0x05; // Increment P1 to get upward portion
+index.html 
+
+<html>
+    <head>
+        <title>Login Page Information </title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <form action="Validate" method="get">
+            Name : <input type="text" name="user"> <br/>
+            Password : <input type="text" name="pass"> <br/>
+            <!-- comment -->
+            <input type="submit" value="SUBMIT">
+        </form>
+    </body>
+</html>
+
+Validate.java:
+
+package rd;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+public class Validate extends HttpServlet {
+
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try ( PrintWriter out = response.getWriter()) {
+            String name=request.getParameter("user");
+            String passwd=request.getParameter("pass");
+            if(passwd.equals("27062003"))
+            {
+                RequestDispatcher rd = request.getRequestDispatcher("Welcome");
+                rd.forward(request, response);
+            }
+            else
+            {
+                out.println("<font color='red'><b>Invalid Password </b></font><br/>");
+                out.println("<a href= \"index.html\">LOGIN PAGE</a>");
+            }
+            
+        }
+    }
 }
-while(P1<0xFF); // stop loop after reaching max value
-do // 2nd do-while for downward portion of //triangular wave
-{
-P1 -= 0x05; // Decrement P1to get downward portion
+
+
+
+Welcome.java
+
+package rd;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Welcome extends HttpServlet {
+
+    
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try ( PrintWriter out = response.getWriter()) 
+        {   String NAME = request.getParameter("user");
+            out.println("<h1>Welcome " + NAME +"</h1" );
+        }
+    }
 }
-while(P1>0x00); // stop loop after reaching lowest value
-}
-}
+
