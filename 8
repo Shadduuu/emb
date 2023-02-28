@@ -1,145 +1,82 @@
-#include<reg51.h>
-#define Lane1Red 0x01 // Define a labels for each combination of colour
-//and lane. 4 lanes and 3 colors- 12 labels
+TCP 
+Myserver
+import java.net.*;
+import java.io.*;
+import java .util.*;
 
-#define Lane1Orange 0x02
-#define Lane1Green 0x04
-#define Lane2Red 0x08
-#define Lane2Orange 0x10
-#define Lane2Green 0x20
-#define Lane3Red 0x01
-#define Lane3Orange 0x02
-#define Lane3Green 0x04
-#define Lane4Red 0x08
-#define Lane4Orange 0x10
-#define Lane4Green 0x20
-sbit Lane1Set = P1^6; // Here the label 'Lane1Set' is used to refer pin
-
-//PORT1.6
-
-sbit Lane2Set = P1^6;
-sbit Lane3Set = P1^7; // When the Value is sent to Port1 it needs to be
-
-//latched
-
-
-
-sbit Lane4Set = P1^7; // Each Lane has its own port pin to latch the data
-// Latching of data is done by sending a Low to
-//High signal on the respective Lane pins
-
-void Reset();
-void showLane12();
-void showLane34();
-void SetLane1();
-void SetLane2();
-void SetLane3();
-void SetLane4();
-void delay(int time);
-void main()
+public class Myserver 
 {
-Reset(); // Reset the Traffic Light Kit (clear previous data)
-while(1)
-{
-showLane12 (); // Display Traffic lights of Lane 1,Lane 2
-Reset ();
-showLane34 (); // Display Traffic lights of Lane 3,Lane 4
-Reset ();
-}
-}
-void Reset()
-{
-P1 = 0x00; // Turn off all LEDs
-delay (100);
-Lane1Set = Lane2Set = 1; // Latch data 0x00 to lane 1 & lane 2
-Lane3Set = Lane4Set = 1; // Latch data 0x00 to lane 3 & lane 4
-}
-void showLane12() // this function will turn on LEDs of Lane 1 and 2
-{
-P1 = Lane1Green; // send data to Port1 to turn on Green LED of
+    public static void main(String[] args) 
+    {
+        try
+        {
+            ServerSocket ss = new ServerSocket(3045);       // portno.
+            System.out.println("-----SERVER-----");
+            System.out.println("Waiting For Client");
+            Socket server = ss.accept();
+            System.out.println("Client Is Now Connected To Server");
+            
+            // Send Data From TCPServer To Client
+            Scanner sc = new Scanner(System.in);
+            PrintWriter pw=new PrintWriter(server.getOutputStream());
+            while(true)
+            {
+                System.out.print("Enter Data : ");
+                String data=sc.nextLine();
+                pw.println("Data from Server : "+data);
+                pw.flush();
+                if(data.equals("exit"))
+                    break;
+            }
+            
 
-//Lane1
-
-SetLane1(); // Latch data into the kit.Green LED of Lane1 will
-
-//now turn on
-
-P1 = Lane1Orange;
-SetLane1();
-P1 = Lane1Red;
-SetLane1();
-P1 = Lane2Green;
-SetLane2();
-P1 = Lane2Orange;
-SetLane2();
-P1 = Lane2Red;
-
-
-SetLane2();
-}
-void showLane34() // this function will turn on LEDs of Lane3 & 4 one
-
-//by one
-
-{
-P1 = Lane3Green; // send data to Port1 to turn Green LED of L3
-SetLane3(); // Latch data into the kit. Green LED of Lane 3 will
-
-//now turn on
-
-P1 = Lane3Orange; // Repeat the steps for all the LEDs on Lane 3 & 4
-SetLane3();
-P1 = Lane3Red;
-SetLane3();
-P1 = Lane4Green;
-SetLane4();
-P1 = Lane4Orange;
-SetLane4();
-P1 = Lane4Red;
-SetLane4();
-}
-void SetLane1() // This function Latches the data to Lane 1 of the
-
-//kit which was sent on Port1
-
-{
-Lane1Set = 0; // 'Lane1Set' i.e pin P1.6 is set to Low
-Lane1Set = 1; // 'Lane1Set' i.e pin P1.6 is set to High
-delay(2000); // A low to high signal will latch the data
-}
-void SetLane2() // This function Latches the data to Lane2 of the kit
-
-//which was sent on Port1
-
-{
-Lane2Set = 0; // 'Lane2Set' i.e pin P1.6 is set to Low
-Lane2Set = 1; // 'Lane2Set' i.e pin P1.6 is set to High
-delay(2000); // A low to high signal will latch the data
-}
-void SetLane3() // This function Latches the data to Lane3 of the kit
-
-//which was sent on Port1
-
-{
-Lane3Set = 0; // 'Lane3Set' i.e pin P1.7 is set to Low
-Lane3Set = 1; // 'Lane3Set' i.e pin P1.7 is set to High
-delay(2000); // A low to high signal will latch the data
+        }
+        catch(Exception ex)
+        {
+            System.out.println("Problem Occur In Connecting to The Sever ");
+        }
+    }
 }
 
+Myclient
+import java.net.*;
+import java.io.*;
 
-
-void SetLane4() // This function Latches the data to Lane4 of the kit
-
-//which was sent on Port1
-
+public class Myclient 
 {
-Lane4Set = 0; // 'Lane4Set' i.e pin P1.7 is set to Low
-Lane4Set = 1; // 'Lane4Set' i.e pin P1.7 is set to High
-delay(2000); // A low to high signal will latch the data
-}
-void delay(int time)
-{
-int i,j;
-for(i=0;i<=time;i++)
-for(j=0;j<=23;j++);
+    public static void main(String[] args) 
+    {
+
+        try
+        {
+            System.out.println("-----CLIENT-----");
+            Socket client = new Socket("localhost",3045);
+            System.out.println(" You Are Connected To Server");
+
+            //read Data From Server 
+            BufferedReader br = new BufferedReader(new InputStreamReader(client.getInputStream()));
+           while (true)
+           {
+               String data=br.readLine();
+               System.out.println(data);
+               if(data.equals("exit"))
+               {
+                   System.out.println("Connection Ended");
+                   break;
+               }
+           }
+           client.close();
+           br.close();
+
+        }
+        catch(SocketException e)
+        {
+            System.out.println("Connection Ended ");
+        }
+        catch (Exception ex)
+        {
+            System.out.println("Error Occured On Connecting To Server ");
+        }
+    }
+    
 }
