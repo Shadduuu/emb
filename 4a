@@ -1,17 +1,62 @@
-#include<reg51.h>
-void delay(int time);
-void main()
-{
-P1=00000000;
-	while(1)
-{
-P1++;
-delay(100);
+import java.awt.*;
+import java.awt.event.*;
+public class fact implements ActionListener{
+Frame frame;
+Label lb1, lb2;
+TextField tf1;
+Button b1;
+public fact() {
+frame = new Frame("Factorial");
+lb1 = new Label("Enter Number");
+tf1 = new TextField();
+b1 = new Button("Calculate");
+lb2 = new Label();
+lb1.setBounds(10, 50, 140, 25);
+tf1.setBounds(150, 50, 120, 25);
+b1.setBounds(20, 90, 250, 35);
+lb2.setBounds(00, 140, 300, 25);
+lb1.setFont(new Font("TimesRoman", 0, 20));
+tf1.setFont(new Font("TimesRoman", 0, 20));
+b1.setFont(new Font("TimesRoman", 0, 23));
+lb2.setFont(new Font("TimesRoman", 0, 22));
+lb1.setAlignment(Label.CENTER);
+lb2.setAlignment(Label.CENTER);
+b1.setBackground(Color.LIGHT_GRAY);
+frame.add(b1);
+frame.add(lb1);
+frame.add(tf1);
+frame.add(lb2);
+frame.setSize(300, 150);
+frame.setResizable(false);
+frame.setLayout(null);
+frame.setVisible(true);
+b1.addActionListener(this);
+frame.addWindowListener(new WindowAdapter() {
+public void windowClosing(WindowEvent e) {
+frame.dispose();
+}
+});
+}
+public void actionPerformed(ActionEvent e) {
+try{
+frame.setSize(300, 180);
+if (e.getSource() == b1) {
+int num = Integer.parseInt(tf1.getText());
+lb2.setText(num + "! = " + calculateFactorial(num));
 }
 }
-void delay(int time)
-{
-int i,j;
-for(i=0;i<=time;i++)
-for(j=0;j<=23;j++);
+catch(Exception ex){
+lb2.setText("Enter Valid Input.");
+}
+}
+public int calculateFactorial(int n) {
+int fact = 1, i;
+for (i = n; i > 0; i--) {
+fact = fact * i;
+}
+return fact;
+}
+public static void main(String[] args) {
+fact awt = new fact();
+}
 }
