@@ -1,0 +1,113 @@
+import java.awt.*;
+import java.awt.event.*;
+public class AWTString implements ActionListener {
+Frame frame;
+Panel p1, p2;
+Button p1Btn, p2Btn;
+Label p1Lb1, p1Lb2, p1Lb3, p2Lb1, p2Lb2, p2Lb3;
+TextField p1Tf, p2Tf;
+public AWTString() {
+frame = new Frame("Strings Operations - AWT");
+concatPanel();
+reversePanel();
+frame.setSize(700, 300);
+frame.setLayout(null);
+frame.setVisible(true);
+p1Btn.addActionListener(this);
+p2Btn.addActionListener(this);
+frame.addWindowListener(new WindowAdapter() {
+public void windowClosing(WindowEvent e) {
+frame.dispose();
+}
+});
+}
+public void concatPanel() {
+p1 = new Panel();
+p1Lb1 = new Label("String Concatenation");
+p1Lb2 = new Label("Enter Name to Concatenate");
+p1Tf = new TextField();
+p1Btn = new Button("Concatenate");
+p1Lb3 = new Label();
+p1.setBounds(0, 0, 350, 350);
+p1Lb1.setBounds(00, 50, 350, 30);
+p1Lb2.setBounds(00, 100, 350, 30);
+p1Tf.setBounds(30, 135, 300, 30);
+p1Btn.setBounds(30, 200, 300, 40);
+p1Lb3.setBounds(00, 280, 350, 30);
+p1Lb1.setFont(new Font("TimesRoman", Font.BOLD, 24));
+p1Lb2.setFont(new Font("TimesRoman", 0, 20));
+p1Tf.setFont(new Font("TimesRoman", 0, 22));
+p1Btn.setFont(new Font("TimesRoman", 0, 25));
+p1Lb3.setFont(new Font("TimesRoman", 0, 22));
+p1Lb1.setAlignment(Label.CENTER);
+p1Lb2.setAlignment(Label.CENTER);
+p1Lb3.setAlignment(Label.CENTER);
+p1.add(p1Lb1);
+p1.add(p1Lb2);
+p1.add(p1Tf);
+p1.add(p1Btn);
+p1.add(p1Lb3);
+frame.add(p1Lb1);
+frame.add(p1Lb2);
+frame.add(p1Tf);
+frame.add(p1Btn);
+frame.add(p1Lb3);
+frame.add(p1);
+}
+public void reversePanel() {
+p2 = new Panel();
+p2Lb1 = new Label("Reverse String");
+p2Lb2 = new Label("Enter String to Reverse");
+p2Tf = new TextField();
+p2Btn = new Button("Reverse It");
+p2Lb3 = new Label();
+p2.setBounds(350, 0, 350, 350);
+p2Lb1.setBounds(350, 50, 350, 30);
+p2Lb2.setBounds(350, 100, 350, 30);
+p2Tf.setBounds(370, 135, 300, 30);
+p2Btn.setBounds(370, 200, 300, 40);
+p2Lb3.setBounds(350, 280, 350, 30);
+p2Lb1.setFont(new Font("TimesRoman", Font.BOLD, 24));
+p2Lb2.setFont(new Font("TimesRoman", 0, 20));
+p2Tf.setFont(new Font("TimesRoman", 0, 22));
+p2Btn.setFont(new Font("TimesRoman", 0, 25));
+p2Lb3.setFont(new Font("TimesRoman", 0, 22));
+p2Lb1.setAlignment(Label.CENTER);
+p2Lb2.setAlignment(Label.CENTER);
+p2Lb3.setAlignment(Label.CENTER);
+p2.setBackground(Color.LIGHT_GRAY);
+p2Lb1.setBackground(Color.LIGHT_GRAY);
+p2Lb2.setBackground(Color.LIGHT_GRAY);
+p2Btn.setBackground(Color.WHITE);
+p2Lb3.setBackground(Color.LIGHT_GRAY);
+p2.add(p2Lb1);
+p2.add(p2Lb2);
+p2.add(p2Tf);
+p2.add(p2Btn);
+p2.add(p2Lb3);
+frame.add(p2Lb1);
+frame.add(p2Lb2);
+frame.add(p2Tf);
+frame.add(p2Btn);
+frame.add(p2Lb3);
+frame.add(p2);
+}
+public void actionPerformed(ActionEvent e) {
+frame.setSize(700, 350);
+if (e.getSource() == p1Btn) {
+p1Lb3.setText("Hello " + p1Tf.getText() + " have a Nice day");
+}
+if (e.getSource() == p2Btn) {
+String str = p2Tf.getText();
+char ch[] = str.toCharArray();
+String reverse = "";
+for (int i = ch.length - 1; i >= 0; i--) {
+reverse += ch[i];
+}
+p2Lb3.setText("Reverse - " + reverse);
+}
+}
+public static void main(String[] args) {
+AWTString awtString = new AWTString();
+}
+}
