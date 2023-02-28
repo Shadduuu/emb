@@ -1,0 +1,35 @@
+public class StudentServlet extends HttpServlet {
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("Servlet called");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3308/student","root","mysql");
+            out.println("connection established");
+            Statement st = con.createStatement();
+            ResultSet rs= st.executeQuery("select * from info");
+           
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet StudentDataServlet</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet StudentDataServlet at " + request.getContextPath() + "</h1>");
+            while (rs.next())
+            {
+                out.println("<p> Roll:-" + rs.getInt(1) + "</p>");
+                out.println("<p> Name:-" + rs.getString(2)+ "</p>");
+                out.println("<p> Marks:-" + rs.getString(3)+"</p>");
+                out.println("<p> Age:-" + rs.getInt(4) + "</p>");
+               
+            }
+           
+            out.println("</body>");
+            out.println("</html>");
+        }
+        catch(Exception e){System.out.println(e);}
+    }
